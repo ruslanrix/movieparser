@@ -2,11 +2,11 @@ class MovieList
 
   def initialize(filename)
     @movielist = CSV.new(File.read(filename), :headers => TITLES, :col_sep => '|')
-    .map { |row| Movie.new(
-      row[:link], row[:movie], row[:year], row[:country],
-      row[:release_date], row[:genre], row[:runtime].delete(" min").to_i,
-      row[:rating], row[:director], row[:actors])
-    }
+    .map { |row| Movie.create(row) }
+  end
+
+  def checkit
+    @movielist.map { |m| puts m.inspect }
   end
 
   def longmovies(amount)

@@ -1,12 +1,28 @@
 class Movie
-  @@bydecade = Array.new
-
-  def self.bydecade
-    @@bydecade
-  end
 
   def self.descendants
     ObjectSpace.each_object(Class).select { |k| k < self }
+  end
+
+  def self.create(row)
+    if row[:year].to_i.between?(1900,1945)
+      return AncientMovie.new(row[:link], row[:movie], row[:year], row[:country],
+      row[:release_date], row[:genre], row[:runtime].delete(" min").to_i,
+      row[:rating], row[:director], row[:actors])
+    elsif row[:year].to_i.between?(1946,1968)
+      return ClassicMovie.new(row[:link], row[:movie], row[:year], row[:country],
+      row[:release_date], row[:genre], row[:runtime].delete(" min").to_i,
+      row[:rating], row[:director], row[:actors])
+    elsif row[:year].to_i.between?(1969,2000)
+      return ModernMovie.new(row[:link], row[:movie], row[:year], row[:country],
+      row[:release_date], row[:genre], row[:runtime].delete(" min").to_i,
+      row[:rating], row[:director], row[:actors])
+    else
+      return NewMovie.new(row[:link], row[:movie], row[:year], row[:country],
+      row[:release_date], row[:genre], row[:runtime].delete(" min").to_i,
+      row[:rating], row[:director], row[:actors])
+    end
+    attr_reader :row
   end
 
   def initialize(link, movie, year, country, release_date, genre, runtime, rating, director, actors)
@@ -20,44 +36,31 @@ class Movie
     @rating = rating
     @director = director
     @actors = actors
-    if year.to_i.between?(1900,1945)
-      @@bydecade.push(AncientMovie.new(self))
-    elsif year.to_i.between?(1946,1968)
-      @@bydecade.push(ClassicMovie.new(self))
-    elsif year.to_i.between?(1969,2000)
-      @@bydecade.push(ModernMovie.new(self))
-    else
-      @@bydecade.push(NewMovie.new(self))
-    end
   end
 
   attr_reader :link, :movie, :year, :country, :release_date, :genre, :runtime, :rating, :director, :actors
 end
 
 class AncientMovie < Movie
-  def initialize(movieinfo)
-    @movieinfo = movieinfo
+  def initialize(link, movie, year, country, release_date, genre, runtime, rating, director, actors)
+    super
   end
-  attr_reader :movieinfo
 end
 
 class ClassicMovie < Movie
-  def initialize(movieinfo)
-    @movieinfo = movieinfo
+  def initialize(link, movie, year, country, release_date, genre, runtime, rating, director, actors)
+    super
   end
-  attr_reader :movieinfo
 end
 
 class ModernMovie < Movie
-  def initialize(movieinfo)
-    @movieinfo = movieinfo
+  def initialize(link, movie, year, country, release_date, genre, runtime, rating, director, actors)
+    super
   end
-  attr_reader :movieinfo
 end
 
 class NewMovie < Movie
-  def initialize(movieinfo)
-    @movieinfo = movieinfo
+  def initialize(link, movie, year, country, release_date, genre, runtime, rating, director, actors)
+    super
   end
-  attr_reader :movieinfo
 end

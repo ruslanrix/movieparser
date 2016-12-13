@@ -32,27 +32,27 @@ or the watched date is earlier than the release year of the movie."
   end
 
   def recommend_list(r_m)
-    puts (if r_m.class == AncientMovie then "#{r_m.movieinfo.movie} - \
-очень старый фильм (#{r_m.movieinfo.year} год), IMDB рейтинг: #{r_m.movieinfo.rating}"
-    elsif r_m.class == ClassicMovie then "#{r_m.movieinfo.movie} - классический фильм, \
-вышедший в #{r_m.movieinfo.year} году. Режиссер #{r_m.movieinfo.director}."
-    elsif r_m.class == ModernMovie then "#{r_m.movieinfo.movie} - современное кино, \
-в главных ролях играют #{r_m.movieinfo.actors}"
-    else  "#{r_m.movieinfo.movie} - новинка, продолжительность фильма - #{r_m.movieinfo.runtime} минут"
+    puts (if r_m.class == AncientMovie then "#{r_m.movie} - \
+очень старый фильм (#{r_m.year} год), IMDB рейтинг: #{r_m.rating}"
+    elsif r_m.class == ClassicMovie then "#{r_m.movie} - классический фильм, \
+вышедший в #{r_m.year} году. Режиссер #{r_m.director}."
+    elsif r_m.class == ModernMovie then "#{r_m.movie} - современное кино, \
+в главных ролях играют #{r_m.actors}"
+    else  "#{r_m.movie} - новинка, продолжительность фильма - #{r_m.runtime} минут"
     end)
   end
 
   def newmovies_advice
-    Movie::bydecade.reject { |m| @mymovielist.has_key?(m.movieinfo.movie) }
-    .sort_by { |m| m.movieinfo.rating * rand(10) * @mymovielist[m.class][:class_rating] }
+    @movielist.reject { |m| @mymovielist.has_key?(m.movie) }
+    .sort_by { |m| m.rating * rand(10) * @mymovielist[m.class][:class_rating] }
     .first(5)
     .map{ |m| recommend_list(m) }
   end
 
   def usermovies_advice
-    Movie::bydecade.select { |m| @mymovielist.has_key?(m.movieinfo.movie) }
-    .sort_by{ |m| @mymovielist[m.movieinfo.movie][:user_rating] * rand(10) *
-    (Date.today.year - @mymovielist[m.movieinfo.movie][:watched_date]) * 10 *
+    @movielist.select { |m| @mymovielist.has_key?(m.movie) }
+    .sort_by{ |m| @mymovielist[m.movie][:user_rating] * rand(10) *
+    (Date.today.year - @mymovielist[m.movie][:watched_date]) * 10 *
     @mymovielist[m.class][:class_rating] }
     .first(5)
     .map{ |m| recommend_list(m) }
