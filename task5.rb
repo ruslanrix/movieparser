@@ -13,7 +13,6 @@ amount = 10
 genre = "Sci-Fi"
 country = "USA"
 input = "runtime"
-puts userstore.checkit
 puts "#{amount} LONGEST MOVIES:"
 puts userstore.longmovies(amount)
 puts

@@ -1,25 +1,26 @@
 class Movie
-
   def self.descendants
     ObjectSpace.each_object(Class).select { |k| k < self }
   end
 
   def self.create(row)
-    if row[:year].to_i.between?(1900,1945)
+    row[:runtime] = row[:runtime].delete(" min").to_i
+    case row[:year].to_i
+    when 1900..1945
       return AncientMovie.new(row[:link], row[:movie], row[:year], row[:country],
-      row[:release_date], row[:genre], row[:runtime].delete(" min").to_i,
+      row[:release_date], row[:genre], row[:runtime],
       row[:rating], row[:director], row[:actors])
-    elsif row[:year].to_i.between?(1946,1968)
+    when 1946..1968
       return ClassicMovie.new(row[:link], row[:movie], row[:year], row[:country],
-      row[:release_date], row[:genre], row[:runtime].delete(" min").to_i,
+      row[:release_date], row[:genre], row[:runtime],
       row[:rating], row[:director], row[:actors])
-    elsif row[:year].to_i.between?(1969,2000)
+    when 1969..2000
       return ModernMovie.new(row[:link], row[:movie], row[:year], row[:country],
-      row[:release_date], row[:genre], row[:runtime].delete(" min").to_i,
+      row[:release_date], row[:genre], row[:runtime],
       row[:rating], row[:director], row[:actors])
-    else
+    when 2000..2017
       return NewMovie.new(row[:link], row[:movie], row[:year], row[:country],
-      row[:release_date], row[:genre], row[:runtime].delete(" min").to_i,
+      row[:release_date], row[:genre], row[:runtime],
       row[:rating], row[:director], row[:actors])
     end
     attr_reader :row
@@ -42,25 +43,25 @@ class Movie
 end
 
 class AncientMovie < Movie
-  def initialize(link, movie, year, country, release_date, genre, runtime, rating, director, actors)
+  def
     super
   end
 end
 
 class ClassicMovie < Movie
-  def initialize(link, movie, year, country, release_date, genre, runtime, rating, director, actors)
+  def
     super
   end
 end
 
 class ModernMovie < Movie
-  def initialize(link, movie, year, country, release_date, genre, runtime, rating, director, actors)
+  def
     super
   end
 end
 
 class NewMovie < Movie
-  def initialize(link, movie, year, country, release_date, genre, runtime, rating, director, actors)
+  def
     super
   end
 end

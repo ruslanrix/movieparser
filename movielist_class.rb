@@ -5,10 +5,6 @@ class MovieList
     .map { |row| Movie.create(row) }
   end
 
-  def checkit
-    @movielist.map { |m| puts m.inspect }
-  end
-
   def longmovies(amount)
     @movielist.sort_by(&:runtime).last(amount).reverse
       .map{ |m| "Movie: #{m.movie}, runtime: #{m.runtime}" }
