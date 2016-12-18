@@ -1,29 +1,24 @@
 class Movie
+  
   def self.descendants
     ObjectSpace.each_object(Class).select { |k| k < self }
   end
 
   def self.create(row)
-    row[:runtime] = row[:runtime].delete(" min").to_i
-    case row[:year].to_i
+    @class_name = case row[:year].to_i
     when 1900..1945
-      return AncientMovie.new(row[:link], row[:movie], row[:year], row[:country],
-      row[:release_date], row[:genre], row[:runtime],
-      row[:rating], row[:director], row[:actors])
+      AncientMovie
     when 1946..1968
-      return ClassicMovie.new(row[:link], row[:movie], row[:year], row[:country],
-      row[:release_date], row[:genre], row[:runtime],
-      row[:rating], row[:director], row[:actors])
+      ClassicMovie
     when 1969..2000
-      return ModernMovie.new(row[:link], row[:movie], row[:year], row[:country],
-      row[:release_date], row[:genre], row[:runtime],
-      row[:rating], row[:director], row[:actors])
+      ModernMovie
     when 2000..2017
-      return NewMovie.new(row[:link], row[:movie], row[:year], row[:country],
-      row[:release_date], row[:genre], row[:runtime],
-      row[:rating], row[:director], row[:actors])
+      NewMovie
     end
     attr_reader :row
+    @class_name.new(row[:link], row[:movie], row[:year], row[:country],
+    row[:release_date], row[:genre], row[:runtime].delete(" min").to_i,
+    row[:rating], row[:director], row[:actors])
   end
 
   def initialize(link, movie, year, country, release_date, genre, runtime, rating, director, actors)
