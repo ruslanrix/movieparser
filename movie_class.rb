@@ -1,8 +1,7 @@
+require_relative 'movie_modules.rb'
 class Movie
-  
-  def self.descendants
-    ObjectSpace.each_object(Class).select { |k| k < self }
-  end
+
+  include MovieMethods
 
   def self.create(row)
     @class_name = case row[:year].to_i

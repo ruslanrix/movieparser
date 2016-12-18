@@ -75,7 +75,6 @@ module MovieCommonMethods
   end
 end
 
-
 module MovieRate
   def rate(watched_movie, user_rating, watched_date)
     if @movielist.any? { |m| m.movie == watched_movie && m.year < watched_date.to_s }
@@ -89,7 +88,7 @@ module MovieRate
   end
 
   def class_rate(class_name, class_rating)
-    if Movie::descendants.any? { |c| c == class_name }
+    if MovieMethods::descendants.any? { |c| c == class_name }
       @mymovielist[class_name] = {}
       @mymovielist[class_name][:class_rating] = class_rating
     else
@@ -124,5 +123,11 @@ module MovieUserMethods
     @mymovielist[m.class][:class_rating] }
     .first(5)
     .map{ |m| recommend_list(m) }
+  end
+end
+
+module MovieMethods
+  def self.descendants
+    ObjectSpace.each_object(Class).select { |k| k < self }
   end
 end
