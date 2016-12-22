@@ -71,5 +71,6 @@ userstore.class_rate(NewMovie, 4)
 puts
 puts "5 random movies, which you didn't see:"
 puts userstore.newmovies_advice
+puts
 puts "5 random movies, which you saw before:"
 puts userstore.usermovies_advice

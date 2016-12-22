@@ -1,8 +1,6 @@
 require_relative 'movie_modules.rb'
 class Movie
 
-  include MovieMethods
-
   def self.create(row)
     @class_name = case row[:year].to_i
     when 1900..1945
@@ -11,10 +9,8 @@ class Movie
       ClassicMovie
     when 1969..2000
       ModernMovie
-    when 2000..2017
-      NewMovie
+    else NewMovie
     end
-    attr_reader :row
     @class_name.new(row[:link], row[:movie], row[:year], row[:country],
     row[:release_date], row[:genre], row[:runtime].delete(" min").to_i,
     row[:rating], row[:director], row[:actors])
@@ -36,26 +32,5 @@ class Movie
   attr_reader :link, :movie, :year, :country, :release_date, :genre, :runtime, :rating, :director, :actors
 end
 
-class AncientMovie < Movie
-  def
-    super
-  end
-end
-
-class ClassicMovie < Movie
-  def
-    super
-  end
-end
-
-class ModernMovie < Movie
-  def
-    super
-  end
-end
-
-class NewMovie < Movie
-  def
-    super
-  end
-end
+["AncientMovie", "ClassicMovie", "ModernMovie", "NewMovie"]
+  .each{ |klass| eval "class #{klass} < Movie; end"}
