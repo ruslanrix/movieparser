@@ -15,15 +15,23 @@ class MyMoviesList < MovieList
   end
   attr_accessor :watched_movie, :user_rating, :watched_date, :class_name, :class_rating
 
-  def recommend_list(r_m)
-    if r_m.class == AncientMovie
-      "#{r_m.movie} - очень старый фильм (#{r_m.year} год), IMDB рейтинг: #{r_m.rating}"
-    elsif r_m.class == ClassicMovie
-      "#{r_m.movie} - классический фильм, вышедший в #{r_m.year} году. Режиссер #{r_m.director}."
-    elsif r_m.class == ModernMovie
-      "#{r_m.movie} - современное кино, в главных ролях играют #{r_m.actors}"
+  def rate(watched_movie, user_rating, watched_date)
+    if @movielist.any? { |m| m.movie == watched_movie && m.year < watched_date.to_s }
+      @mymovielist[watched_movie] = {}
+      @mymovielist[watched_movie][:user_rating] = user_rating
+      @mymovielist[watched_movie][:watched_date] = watched_date
     else
-      "#{r_m.movie} - новинка, продолжительность фильма - #{r_m.runtime} минут"
+      puts "Error. The name of the movie '#{watched_movie}' is incorrect \
+      or the watched date is earlier than the release year of the movie."
+    end
+  end
+  
+  def class_rate(class_name, class_rating)
+    if Object.const_defined? ("#{class_name}")
+      @mymovielist[class_name] = {}
+      @mymovielist[class_name][:class_rating] = class_rating
+    else
+      puts "Error. Wrong name of the class."
     end
   end
 
