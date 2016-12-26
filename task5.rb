@@ -64,10 +64,10 @@ userstore.rate("Inside Out", 8, 2016)
 userstore.rate("The Grand Budapest Hotel", 8, 2015)
 userstore.rate("The Avengers", 8, 2014)
 userstore.rate("wazzzzzup", 5, 2010)
-userstore.class_rate(AncientMovie, 2)
-userstore.class_rate(ClassicMovie, 1)
-userstore.class_rate(ModernMovie, 1)
-userstore.class_rate(NewMovie, 4)
+# userstore.class_rate(AncientMovie, 2)
+# userstore.class_rate(ClassicMovie, 1)
+# userstore.class_rate(ModernMovie, 1)
+# userstore.class_rate(NewMovie, 4)
 puts
 puts "5 random movies, which you didn't see:"
 puts userstore.newmovies_advice
