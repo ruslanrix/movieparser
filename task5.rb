@@ -71,8 +71,8 @@ puts
 puts "5 random movies, which you saw before:"
 puts userstore.usermovies_advice
 userstore.print{ |movie| "#{movie.year}: #{movie.movie}" }
-puts "This was sorted  by sort_by"
+puts "This list was sorted by genre and year"
 userstore.sorted_by{ |movie| [movie.genre, movie.year] }
 userstore.add_sort_algo(:genres_years) { |movie| [movie.genre, movie.year] }
-puts "This was sorted  by genres_years"
+puts "This list was sorted  by sort algorithm"
 userstore.sort_by(:genres_years)

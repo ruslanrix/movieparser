@@ -90,18 +90,12 @@ class MovieList
   end
 
   def add_sort_algo (arg, &block)
-    @sort_algo_collect[arg] = proc { |m| m.call if block_given? }
+    @sort_algo_collect[arg] = proc { |m| yield m if block_given? }
     puts @sort_algo_collect.keys
-    # define_singleton_method(:genres_years) { yield }
-    # arg = proc { |m| m.call if block_given? }
-    # @@genres_years = arg
-    # puts arg.inspect
   end
 
   def sort_by(arg)
-    # puts :genres_years.inspect
-    puts @sort_algo_collect[arg]
-    @movielist.sort_by{@sort_algo_collect[arg]}.map { |m| puts "#{m.movie} : #{m.genre} : #{m.year} : #{m.director}" }
+    @movielist.sort_by(&@sort_algo_collect[arg]).map { |m| puts "#{m.movie} : #{m.genre} : #{m.year} : #{m.director}" }
   end
 
 end
