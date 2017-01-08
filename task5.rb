@@ -64,13 +64,15 @@ userstore.rate("Inside Out", 8, 2016)
 userstore.rate("The Grand Budapest Hotel", 8, 2015)
 userstore.rate("The Avengers", 8, 2014)
 userstore.rate("wazzzzzup", 5, 2010)
-# userstore.class_rate(AncientMovie, 2)
-# userstore.class_rate(ClassicMovie, 1)
-# userstore.class_rate(ModernMovie, 1)
-# userstore.class_rate(NewMovie, 4)
 puts
 puts "5 random movies, which you didn't see:"
 puts userstore.newmovies_advice
 puts
 puts "5 random movies, which you saw before:"
 puts userstore.usermovies_advice
+userstore.print{ |movie| "#{movie.year}: #{movie.movie}" }
+puts "This was sorted  by sort_by"
+userstore.sorted_by{ |movie| [movie.genre, movie.year] }
+userstore.add_sort_algo(:genres_years) { |movie| [movie.genre, movie.year] }
+puts "This was sorted  by genres_years"
+userstore.sort_by(:genres_years)

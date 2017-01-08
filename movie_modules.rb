@@ -8,6 +8,7 @@ module MovieRate
     @class_name = class_name
     @class_rating = class_rating
     @mymovielist = {}
+    @sort_algo_collect = {}
   end
   attr_accessor :watched_movie, :user_rating, :watched_date, :class_name, :class_rating
 
