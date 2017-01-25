@@ -18,22 +18,22 @@ class MovieList
 
   def reldate(genre)
     @movielist.sort_by(&:release_date).select{ |m| m.genre.include? genre }
-      .map{ |m| "Movie: #{m.movie}, Release date: #{m.release_date}, Genre: #{m.genre}" }
+      .map{ |m| "Movie: #{m.movie}, Release date: #{m.release_date}, Genre: #{m.genre.join(', ')}" }
   end
 
   def reldate_reverse(genre)
     @movielist.sort_by(&:release_date).reverse.select{ |m| m.genre.include? genre }
-      .map{ |m| "Movie: #{m.movie}, Release date: #{m.release_date}, Genre: #{m.genre}" }
+      .map{ |m| "Movie: #{m.movie}, Release date: #{m.release_date}, Genre: #{m.genre.join(', ')}" }
   end
 
   def except_genre(genre)
     @movielist.sort_by(&:release_date).select{ |m| !m.genre.include? genre }
-      .map{ |m| "Movie: #{m.movie}, Release date: #{m.release_date}, Genre: #{m.genre}" }
+      .map{ |m| "Movie: #{m.movie}, Release date: #{m.release_date}, Genre: #{m.genre.join(', ')}" }
   end
 
   def except_genre_reverse(genre)
     @movielist.sort_by(&:release_date).reverse.select{ |m| !m.genre.include? genre }
-      .map{ |m| "Movie: #{m.movie}, Release date: #{m.release_date}, Genre: #{m.genre}" }
+      .map{ |m| "Movie: #{m.movie}, Release date: #{m.release_date}, Genre: #{m.genre.join(', ')}" }
   end
 
   def all_directors
@@ -68,7 +68,7 @@ class MovieList
   def m_sort_by (input)
     @movielist.sort_by{ |m| m.send(input.to_sym) }
     .map{ |m| "Movie: #{m.movie}, Link: #{m.link}, Year: #{m.year},
-      Country: #{m.country}, Release date: #{m.release_date}, Genre: #{m.genre},
+      Country: #{m.country}, Release date: #{m.release_date}, Genre: #{m.genre.join(', ')},
       Runtime: #{m.runtime}, Rating: #{m.rating}, Director: #{m.director}, Actors: #{m.actors} "
     }
   end
@@ -76,7 +76,7 @@ class MovieList
   def m_sort_by_reverse (input)
     @movielist.sort_by{ |m| m.send(input.to_sym) }.reverse
     .map{ |m| "Movie: #{m.movie}, Link: #{m.link}, Year: #{m.year},
-      Country: #{m.country}, Release date: #{m.release_date}, Genre: #{m.genre},
+      Country: #{m.country}, Release date: #{m.release_date}, Genre: #{m.genre.join(', ')},
       Runtime: #{m.runtime}, Rating: #{m.rating}, Director: #{m.director}, Actors: #{m.actors} "
     }
   end
@@ -86,16 +86,43 @@ class MovieList
   end
 
   def sorted_by
-    @movielist.sort_by{ |m| yield m if block_given? }.map { |m| puts "#{m.movie} : #{m.genre} : #{m.year}" }
+    @movielist.sort_by{ |m| yield m if block_given? }.map { |m| "#{m.movie} : #{m.genre.join(', ')} : #{m.year}" }
   end
 
   def add_sort_algo (arg, &block)
-    @sort_algo_collect[arg] = proc { |m| yield m if block_given? }
-    puts @sort_algo_collect.keys
+    @sort_algo_collect[arg] = block
   end
 
   def sort_by(arg)
-    @movielist.sort_by(&@sort_algo_collect[arg]).map { |m| puts "#{m.movie} : #{m.genre} : #{m.year} : #{m.director}" }
+    if @sort_algo_collect[arg] != nil
+    @movielist.sort_by(&@sort_algo_collect[arg]).map { |m| "#{m.movie} : #{m.genre.join(', ')} : #{m.year} : #{m.director}" }
+    else "This algorithm #{arg} is unknown"
+    end
+  end
+
+  def add_filter(arg, &block)
+    @filters[arg] = block
+  end
+
+  def filter(arg)
+    if arg.any? { |k, v| @filters[k] == nil}
+      "Some of the filters: #{arg.keys.join(', ')} - is unknown"
+    else
+    @movielist.select{ |m| arg.all? { |k, v| @filters[k].call(m, *v) } }
+    .map { |m| " #{m.movie} : #{m.genre.join(', ')} : #{m.year} : #{m.director} " }
+    end
+  end
+
+end
+
+class Array
+
+  def include?(parameter)
+      if parameter.is_a? Array
+        return parameter.any?{|x| self.include? x }
+      else
+        super
+      end
   end
 
 end

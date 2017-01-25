@@ -9,11 +9,12 @@ module MovieRate
     @class_rating = class_rating
     @mymovielist = {}
     @sort_algo_collect = {}
+    @filters = {}
   end
   attr_accessor :watched_movie, :user_rating, :watched_date, :class_name, :class_rating
 
   def rate(watched_movie, user_rating, watched_date)
-    if @movielist.any? { |m| m.movie == watched_movie && m.year < watched_date.to_s }
+    if @movielist.any? { |m| m.movie == watched_movie && m.year < watched_date }
       @mymovielist[watched_movie] = {}
       @mymovielist[watched_movie][:user_rating] = user_rating
       @mymovielist[watched_movie][:watched_date] = watched_date
@@ -22,5 +23,5 @@ module MovieRate
       or the watched date is earlier than the release year of the movie."
     end
   end
-
+  
 end

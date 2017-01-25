@@ -11,8 +11,8 @@ class Movie
       ModernMovie
     else NewMovie
     end
-    class_name.new(row[:link], row[:movie], row[:year], row[:country],
-    row[:release_date], row[:genre], row[:runtime].delete(" min").to_i,
+    class_name.new(row[:link], row[:movie], row[:year].to_i, row[:country],
+    row[:release_date], row[:genre].split(','), row[:runtime].delete(" min").to_i,
     row[:rating], row[:director], row[:actors])
   end
 

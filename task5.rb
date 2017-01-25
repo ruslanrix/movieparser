@@ -72,7 +72,17 @@ puts "5 random movies, which you saw before:"
 puts userstore.usermovies_advice
 userstore.print{ |movie| "#{movie.year}: #{movie.movie}" }
 puts "This list was sorted by genre and year"
-userstore.sorted_by{ |movie| [movie.genre, movie.year] }
+puts userstore.sorted_by{ |movie| [movie.genre, movie.year] }
 userstore.add_sort_algo(:genres_years) { |movie| [movie.genre, movie.year] }
 puts "This list was sorted  by sort algorithm"
-userstore.sort_by(:genres_years)
+puts userstore.sort_by(:genres_years)
+puts userstore.sort_by(:geweenrffes_yesdfsdfars)
+# userstore.add_filter(:box_office_greater){|movie, usd| movie.box_office > usd}
+userstore.add_filter(:genres){|movie, *genres| genres.include?(movie.genre)}
+userstore.add_filter(:years){|movie, from, to| (from..to).include?(movie.year)}
+puts "TEST"
+puts userstore.filter(
+    genres: ['Comedy', 'Horror'],
+    years: [2005, 2010],
+    # box_office_greater: 30_000_000
+  )
