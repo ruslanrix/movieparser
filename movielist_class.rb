@@ -82,11 +82,11 @@ class MovieList
   end
 
   def print
-     @movielist.each{|m| puts yield m if block_given?  }
+     @movielist.each{|m| puts (block_given? ? (yield m) : ("Movie: #{m.movie}")) }
   end
 
   def sorted_by
-    @movielist.sort_by{ |m| yield m if block_given? }.map { |m| "#{m.movie} : #{m.genre.join(', ')} : #{m.year}" }
+    @movielist.sort_by{ |m| yield m if block_given? }.map { |m| m.movie }
   end
 
   def add_sort_algo (arg, &block)
@@ -94,9 +94,10 @@ class MovieList
   end
 
   def sort_by(arg)
-    if @sort_algo_collect[arg] != nil
-    @movielist.sort_by(&@sort_algo_collect[arg]).map { |m| "#{m.movie} : #{m.genre.join(', ')} : #{m.year} : #{m.director}" }
-    else "This algorithm #{arg} is unknown"
+    if @sort_algo_collect.include?(arg)
+    @movielist.sort_by(&@sort_algo_collect[arg]).map { |m| m.movie }
+    else
+      raise "This algorithm #{arg} is unknown"
     end
   end
 
@@ -105,24 +106,19 @@ class MovieList
   end
 
   def filter(arg)
-    if arg.any? { |k, v| @filters[k] == nil}
-      "Some of the filters: #{arg.keys.join(', ')} - is unknown"
+    @unknown = []
+    if arg.keys.each { |k| @unknown.push(k) if !@filters.key?(k) }.all? {|k| @unknown.empty? }
+      @movielist.select{ |m| arg.all? { |k, v| @filters[k].call(m, *v) } }
+      .map { |m| m.movie }
     else
-    @movielist.select{ |m| arg.all? { |k, v| @filters[k].call(m, *v) } }
-    .map { |m| " #{m.movie} : #{m.genre.join(', ')} : #{m.year} : #{m.director} " }
+      raise "The following filters: #{@unknown.join(', ')} - are unknown"
     end
   end
 
 end
 
 class Array
-
   def include?(parameter)
-      if parameter.is_a? Array
-        return parameter.any?{|x| self.include? x }
-      else
-        super
-      end
+      (parameter.is_a? Array) ? (return parameter.any?{|x| self.include? x }) : super
   end
-
 end
