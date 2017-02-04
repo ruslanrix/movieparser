@@ -108,7 +108,7 @@ class MovieList
   def filter(arg)
     unknown = []
     unknown = arg.keys.reject { |k| @filters.key?(k) }
-    p "The following filters: #{unknown.join(', ')} - are unknown" unless unknown.empty?
+    fail "The following filters: #{unknown.join(', ')} - are unknown" unless unknown.empty?
     @movielist.select{ |m| arg.reject {|a| unknown.include?(a) }
     .all? { |k, v| @filters[k].call(m, *v) } }
   end
