@@ -64,13 +64,31 @@ userstore.rate("Inside Out", 8, 2016)
 userstore.rate("The Grand Budapest Hotel", 8, 2015)
 userstore.rate("The Avengers", 8, 2014)
 userstore.rate("wazzzzzup", 5, 2010)
-# userstore.class_rate(AncientMovie, 2)
-# userstore.class_rate(ClassicMovie, 1)
-# userstore.class_rate(ModernMovie, 1)
-# userstore.class_rate(NewMovie, 4)
 puts
 puts "5 random movies, which you didn't see:"
 puts userstore.newmovies_advice
 puts
 puts "5 random movies, which you saw before:"
 puts userstore.usermovies_advice
+puts
+userstore.print{ |movie| "#{movie.year}: #{movie.movie}" }
+puts
+puts "This list was sorted by genre and year"
+puts
+puts userstore.sorted_by{ |movie| [movie.genre, movie.year] }
+puts
+userstore.add_sort_algo(:genres_years) { |movie| [movie.genre, movie.year] }
+puts "This list was sorted  by sort algorithm"
+puts
+puts userstore.sort_by(:genres_years)
+puts
+# puts userstore.sort_by(:geweenrffes_yesdfsdfars)
+# userstore.add_filter(:box_office_greater){|movie, usd| movie.box_office > usd}
+userstore.add_filter(:genres){|movie, *genres| genres.include?(movie.genre)}
+userstore.add_filter(:years){|movie, from, to| (from..to).include?(movie.year)}
+puts "TEST"
+puts userstore.filter(
+    genres: ['Comedy', 'Horror'],
+    years: [2005, 2010],
+    box_office_greater: 30_000_000
+  )
