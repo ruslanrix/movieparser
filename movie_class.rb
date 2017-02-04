@@ -29,6 +29,10 @@ class Movie
     @actors = actors
   end
 
+  def to_s
+    self.movie
+  end
+  
   attr_reader :link, :movie, :year, :country, :release_date, :genre, :runtime, :rating, :director, :actors
 end
 

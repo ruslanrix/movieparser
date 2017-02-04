@@ -86,7 +86,7 @@ class MovieList
   end
 
   def sorted_by
-    @movielist.sort_by{ |m| yield m if block_given? }.map { |m| m.movie }
+    @movielist.sort_by{ |m| yield m if block_given? }
   end
 
   def add_sort_algo (arg, &block)
@@ -95,7 +95,7 @@ class MovieList
 
   def sort_by(arg)
     if @sort_algo_collect.include?(arg)
-    @movielist.sort_by(&@sort_algo_collect[arg]).map { |m| m.movie }
+    @movielist.sort_by(&@sort_algo_collect[arg])
     else
       raise "This algorithm #{arg} is unknown"
     end
@@ -106,13 +106,11 @@ class MovieList
   end
 
   def filter(arg)
-    @unknown = []
-    if arg.keys.each { |k| @unknown.push(k) if !@filters.key?(k) }.all? {|k| @unknown.empty? }
-      @movielist.select{ |m| arg.all? { |k, v| @filters[k].call(m, *v) } }
-      .map { |m| m.movie }
-    else
-      raise "The following filters: #{@unknown.join(', ')} - are unknown"
-    end
+    unknown = []
+    unknown = arg.keys.reject { |k| @filters.key?(k) }
+    p "The following filters: #{unknown.join(', ')} - are unknown" unless unknown.empty?
+    @movielist.select{ |m| arg.reject {|a| unknown.include?(a) }
+    .all? { |k, v| @filters[k].call(m, *v) } }
   end
 
 end
